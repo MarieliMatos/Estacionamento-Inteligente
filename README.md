@@ -18,6 +18,8 @@
 * Aplicação: permite a interação entre o usuário e a camada de dispositivo.
 * Negócio: essa camada é responsável por gerir os serviços implementados e com os dados recebidos da camada de aplicação construir um modelo de negócios.
 
+![](/figuras/Arquitetura.png)
+
 Tendo em vista essa arquitetura aplicada ao projeto, a camada de percepção terá como sensor uma câmera, dessa forma será possível decidir se a vaga está disponível ou qual o carro que está a ocupando. Para conexão entre a camada de dispositivo e de processamento, haverá um microcontrolador para adquirir os dados desse sensor e enviá-los via o protocolo MQTT para essa camada. Com esses dados, a camada de processam aneto sera encarregada de armazenar e disponibilizar as informação para a próxima a aplicação de interface com o usuário, a figura 1 mostra o diagrama do sistema.
 
 ## Camada de percepção
