@@ -24,7 +24,6 @@
 <p align="center">
   <img src="figuras/Arquitetura.png">
 </p>
-Fonte: Autoria Proópria (2020)
 
 ## Camada de percepção
 
@@ -49,7 +48,7 @@ No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi p
 <p align="center">
   <img src="figuras/policy.png">
 </p>
-Fonte: Autoria Proópria (2020)
+
 
 
  ## Camada de processamento
@@ -70,7 +69,6 @@ A tabela criada para esse projeto foi estabelecida com a chave de partição, se
 <p align="center">
   <img src="figuras/tableDB.png">
 </p>
-Fonte: Autoria Proópria (2020)
 
  ## Camada de aplicação
  
@@ -81,7 +79,13 @@ Fonte: Autoria Proópria (2020)
  Para o gerenciamento de usuários no aplicativo, foi utilizado o recurso Amazon Cognito. Essa ferramenta permite adicionar cadastros, efetuar login e controle de acesso de usuários, além de permitir a autenticação por meio de provedores de identidade sociais, tal como Google, Facebook e a Amazon.
  
  ## Referências
- 
+
+AMAZON. Amazon Cognito: developer guide. Disponível em: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-dg.pdf. Acesso em: 06 abr. 2020.
+
+AMAZON. Amazon DynamoDB: developer guide. Disponível em: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/dynamodb-dg.pdf. Acesso em: 06 abr. 2020.
+
+AMAZON. AWS IoT: developer guide. Disponível em: https://docs.aws.amazon.com/iot/latest/developerguide/iot-dg.pdf. Acesso em: 06 abr. 2020.
+
 MASHAL, Ibrahim et al. Choices for interaction with things on Internet and underlying issues. Ad Hoc Networks. Online, p. 68-90. maio 2015. Disponível em: https://www.sciencedirect.com/science/article/abs/pii/S1570870514003138?via%3Dihub. Acesso em: 03 abr. 2020.
 	
 YUAN, Michael. Conhecendo o MQTT: por que o mqtt é um dos melhores protocolos de rede para a internet das coisas?. Por que o MQTT é um dos melhores protocolos de rede para a Internet das Coisas?. 2017. Disponível em: https://www.ibm.com/developerworks/br/library/iot-mqtt-why-good-for-iot/index.html. Acesso em: 03 abr. 2020.
