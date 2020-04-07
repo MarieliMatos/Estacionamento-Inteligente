@@ -18,9 +18,13 @@
 * Aplicação: permite a interação entre o usuário e a camada de dispositivo.
 * Negócio: essa camada é responsável por gerir os serviços implementados e com os dados recebidos da camada de aplicação construir um modelo de negócios.
 
-![](/figuras/Arquitetura.png)
+  Tendo em vista essa arquitetura aplicada ao projeto, a camada de percepção terá como sensor uma câmera, dessa forma será possível decidir se a vaga está disponível ou qual o carro que está a ocupando. Para conexão entre a camada de dispositivo e de processamento, haverá um microcontrolador para adquirir os dados desse sensor e enviá-los via o protocolo MQTT para essa camada. Com esses dados, a camada de processamento será encarregada de armazenar e disponibilizar as informação para a camada da aplicação de interface com o usuário, a figura 1 mostra o diagrama do sistema.
 
-Tendo em vista essa arquitetura aplicada ao projeto, a camada de percepção terá como sensor uma câmera, dessa forma será possível decidir se a vaga está disponível ou qual o carro que está a ocupando. Para conexão entre a camada de dispositivo e de processamento, haverá um microcontrolador para adquirir os dados desse sensor e enviá-los via o protocolo MQTT para essa camada. Com esses dados, a camada de processam aneto sera encarregada de armazenar e disponibilizar as informação para a próxima a aplicação de interface com o usuário, a figura 1 mostra o diagrama do sistema.
+<div align="center"> Figura 1 - Arquitetura do Projeto</div>
+<p align="center">
+  <img src="figuras/Arquitetura.png">
+</p>
+Fonte: Autoria Proópria (2020)
 
 ## Camada de percepção
 
@@ -40,7 +44,14 @@ Os dispositivos que comunicam-se com o protocolo MQTT utilizam o método de segu
 Para haver transferência de dados, além de possuir o certificado, o dispositivo (também chamado de coisa) também precisa estar autorizado a promover a leitura ou escrita em um tópico. Por isso é preciso configurar as politicas de acesso a ‘coisa’, dessa maneira, o usuário tem pleno controle dos acessos aos tópicos do Core.
 
 No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi preciso criar uma coisa (*thing*) que represente este dispositivo na plataforma. Em seguida, criou-se um certificado de autenticação e associar a coisa. Por fim, a politica de autorização foi criada (figura 2), que nesse caso apenas de publicação no tópico da aplicação.
-        
+
+<div align="center"> Figura 2 - Política de dispositivos conectados </div>
+<p align="center">
+  <img src="figuras/policy.png">
+</p>
+Fonte: Autoria Proópria (2020)
+
+
  ## Camada de processamento
  
  Para armazenar os dados obtidos dos sensores, foi utilizado a plataforma de banco de dados da Amazon, o DynamoDB. Essa tecnologia é um serviço de banco de dados NoSQL (não relacional), com o tipo de armazenamento de chave-valor.
@@ -55,6 +66,12 @@ Para associar a camada de rede com a camada de processamento, foi estabelecido u
 
 A tabela criada para esse projeto foi estabelecida com a chave de partição, sendo a chave primária o número da vaga, e com os atributos de status, para verificar se a vaga está ocupada e número da placa do carro. Quando não houver carro na vaga, este ultimo atributo estará como nulo, a figura 3 mostra uma pré-visualização da tabela.
  
+<div align="center"> Figura 3 - Tabela do banco de dados </div>
+<p align="center">
+  <img src="figuras/tableDB.png">
+</p>
+Fonte: Autoria Proópria (2020)
+
  ## Camada de aplicação
  
  A comunicação entre os dados adquiridos e o usuário final foi realizada por meio de um aplicativo, utilizando o framework Amplify, disponibilizado pela Amazon. Essa ferramenta oferece diversas bibliotecas que facilitam a integração do backend ao frontend da aplicação.
