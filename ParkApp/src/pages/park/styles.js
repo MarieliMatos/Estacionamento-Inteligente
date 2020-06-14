@@ -15,7 +15,6 @@ export default StyleSheet.create({
     fontFamily: "FiraCode",
     fontSize: 24,
   },
-
   park: {
     flex: 1,
     flexDirection: "row",
@@ -29,7 +28,8 @@ export default StyleSheet.create({
     borderRightWidth: 0,
     borderWidth: 2,
     height: 73,
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    alignItems:"center",
     width: 105,
   },
 
@@ -39,7 +39,8 @@ export default StyleSheet.create({
     borderLeftWidth: 0,
     borderWidth: 2,
     height: 73,
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    alignItems:"center",
     width: 105,
   },
 
@@ -57,5 +58,11 @@ export default StyleSheet.create({
     height: 50,
     justifyContent: "center",
     width: 50,
+  },
+
+  image:{
+    alignSelf: "flex-start",
+    alignSelf:"center",
+    transform: [{rotate: "90deg"}]
   },
 });
