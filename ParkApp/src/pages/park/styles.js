@@ -23,24 +23,22 @@ export default StyleSheet.create({
   },
 
   slotA: {
-    alignItems: "flex-end",
+    alignItems: "center",
     borderColor: "#f5f5f5",
     borderRightWidth: 0,
     borderWidth: 2,
     height: 73,
     justifyContent: "center",
-    alignItems:"center",
     width: 105,
   },
 
   slotB: {
-    alignItems: "flex-start",
+    alignItems: "center",
     borderColor: "#f5f5f5",
     borderLeftWidth: 0,
     borderWidth: 2,
     height: 73,
     justifyContent: "center",
-    alignItems:"center",
     width: 105,
   },
 
@@ -60,9 +58,18 @@ export default StyleSheet.create({
     width: 50,
   },
 
-  image:{
+  occupiedSlot: {
+    alignItems: "center",
+    backgroundColor: "#f5f5f54d",
+    borderRadius: 8,
+    height: 60,
+    justifyContent: "center",
+    width: 105,
+  },
+
+  image: {
     alignSelf: "flex-start",
-    alignSelf:"center",
-    transform: [{rotate: "90deg"}]
+    alignSelf: "center",
+    transform: [{ rotate: "90deg" }],
   },
 });
