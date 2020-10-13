@@ -8,10 +8,6 @@ import * as Font from "expo-font";
 import api from "../../services/api";
 import styles from "./styles";
 
-/*
-  TODO:
-    Quando a vaga estiver ocupada por um carro procurado pelo usuário, mostrar em destaque
-*/
 export default function Park() {
   const [fontLoad, setFontLoad] = useState(false);
   const [park, setPark] = useState("");

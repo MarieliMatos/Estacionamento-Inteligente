@@ -7,13 +7,6 @@ import * as Font from "expo-font";
 
 import styles from "./styles";
 
-/*
-  TODO:
-    Quando o usuário buscar por uma placa buscar na API por uma incidencia
-    Se a placa está cadastrada no BD retornar a tela inicial com a placa
-    Se a placa não está no banco de dados mostar um aviso ao usuário
-*/
-
 export default function Search() {
   const [fontLoaded, setFontLoad] = useState(false);
   const [plateInput, setPlateInput] = useState('');

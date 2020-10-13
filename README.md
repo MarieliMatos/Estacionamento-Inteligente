@@ -12,14 +12,14 @@
 6. [Referências](#referências)
 ## Arquitetura
 
-  Para desenvolver esse projeto, foi escolhido a arquitetura de cinco camadas, que atualmente é um dos modelos mais utilizados na área de IoT (MASHAL et al., 2015). Essa estrutura é composta pelas camadas:
+  Para desenvolver esse projeto, foi escolhido a arquitetura de cinco camadas, que atualmente é um dos modelos mais utilizados na área de IoT (MASHAL et al., 2015). Essa estrutura é composta pelas seguintes camadas:
 * Percepção: também chamada de camada de dispositivo, é responsável pela identificação de objetos e aquisição de dados.
 * Rede: sua função é estabelecer a comunicação entre a camada de percepção com a camada de processamento de forma segura e confiável.
 * Processamento: encarregada de armazenar, analisar e processar as informações já obtidas.
 * Aplicação: permite a interação entre o usuário e a camada de dispositivo.
 * Negócio: essa camada é responsável por gerir os serviços implementados e com os dados recebidos da camada de aplicação construir um modelo de negócios.
 
-  Tendo em vista essa arquitetura aplicada ao projeto, a camada de percepção terá como sensor uma câmera, dessa forma será possível decidir se a vaga está disponível ou qual o carro que está a ocupando. Para conexão entre a camada de dispositivo e de processamento, haverá um microcontrolador para adquirir os dados desse sensor e enviá-los via o protocolo MQTT para essa camada. Com esses dados, a camada de processamento será encarregada de armazenar e disponibilizar as informação para a camada da aplicação de interface com o usuário, a figura 1 mostra o diagrama do sistema.
+  Tendo em vista essa arquitetura aplicada ao projeto, a camada de percepção terá como sensor uma câmera, dessa forma será possível decidir se a vaga está disponível ou qual o carro que está a ocupando. Para conexão entre a camada de dispositivo e de processamento, haverá um microcontrolador para adquirir os dados desse sensor e enviá-los via o protocolo MQTT para essa camada. Com esses dados, a camada de processamento será encarregada de armazenar e disponibilizar as informação para a camada da aplicação de interface com o usuário, a Figura 1 mostra o diagrama do sistema.
 
 <div align="center"> Figura 1 - Arquitetura do Projeto</div>
 <p align="center">
@@ -28,27 +28,31 @@
 
 ## Camada de percepção
 
-O reconhecimento de placas foi realizado utilizando a linguagem de programação Python, com o auxílio da biblioteca de visão computacional e aprendizado de máquina OpenCV (Open Source Computer Vision Library).
+O reconhecimento de placas foi realizado por meio de um Raspberry Pi Zero W, utilizando a linguagem de programação Python, com o auxílio da biblioteca de visão computacional e aprendizado de máquina OpenCV (Open Source Computer Vision Library) e
+da biblioteca de reconhecimento ótico de caracteres (OCR) Tesseract.
 
-A primeira etapa foi converter a imagem em tons de cinza e em seguida retirar os ruídos da imagem, para isso foi utilizado um algoritmo que borra a imagem. Essa função faz a média dos pixels sob a área de um kernel e substitui o elemento central por esse valor. 
+Para realizar esta tarefa, foi preciso de várias camadas de processamento de imagens, a fim de de selecionar a região
+da placa, para que o algorítimo de detecção de caracteres seja chamado.
+
+A primeira etapa foi converter a imagem em tons de cinza e em seguida retirar os detalhes da imagem, para isso foi utilizado um algoritmo que borra a imagem. Essa função faz a média dos pixels sob a área de um kernel e substitui o elemento central por esse valor. 
 
 <div align="center"> Figura 2 - Figura Borrada</div>
 <p align="center">
   <img src="figuras/blur.png" width=400>
 </p>
 
-O próximo passo foi detectar as bordas da imagem, a forma feita neste trabalho foi detectar uma mudança brusca de de intensidade de um pixel, por meio da derivada, utilizando o filtro Sobel.
+O próximo passo foi detectar a região da placa, a forma feita neste trabalho foi detectar as letras e formar um retangulo em volta. Para isso foi utilizado um algorítimo que detecta a variação brusca de de intensidade de um pixel, por meio da derivada.
 
 O filtro de Sobel é um operador de diferenciação, que faz uma aproximação ponto à ponto do gradiente da intensidade dos pixels da imagem. Esse algoritmo é capaz de determinar uma variação de claro para escuro e a taxa de alteração em uma determinada direção (eixo x ou y). Dessa forma, as letras da placa foram detectadas.
 
-<div align="center"> Figura 2 - Filtro de Sobel</div>
+<div align="center"> Figura 3 - Filtro de Sobel</div>
 <p align="center">
   <img src="figuras/sobel.png" width=400>
 </p>
 
 Com as letras detectadas foi realizada a binarização da imagem, para realçar a área de interesse. A última etapa foi interligar as letras da placa e formar um retângulo em volta. Para isso foi criado uma estrutura morfológica específica que melhor se encaixou neste caso.
 
-<div align="center"> Figura 5 - Binarização e Estrutura morfológica </div>
+<div align="center"> Figura 4 - Binarização e Estrutura morfológica </div>
 <p align="center">
   <img src="figuras/binarização.png" width="250" />
   <img src="figuras/rect.png" width="240" /> 
@@ -57,7 +61,7 @@ Com as letras detectadas foi realizada a binarização da imagem, para realçar 
 
 Em seguida foi detectado os contornos de forma retangular imagem, e dentre os retângulos foi determinado o retângulo que tem a área da placa. E por fim, foi realizado o corte da imagem na região retangular.
 
-<div align="center"> Figura 2 - Política de dispositivos conectados </div>
+<div align="center"> Figura 5 - Política de dispositivos conectados </div>
 <p align="center">
   <img src="figuras/crop.png" width=400>
 </p>
@@ -84,10 +88,11 @@ Para haver transferência de dados, além de possuir o certificado, o dispositiv
 
 No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi preciso criar uma coisa (*thing*) que represente este dispositivo na plataforma. Em seguida, criou-se um certificado de autenticação e associar a coisa. Por fim, a politica de autorização foi criada (figura 2), que nesse caso apenas de publicação no tópico da aplicação.
 
-<div align="center"> Figura 2 - Política de dispositivos conectados </div>
+<div align="center"> Figura 6 - Política de dispositivos conectados </div>
 <p align="center">
   <img src="figuras/policy.png">
 </p>
+
 
 
  ## Camada de processamento
@@ -104,14 +109,14 @@ Para associar a camada de rede com a camada de processamento, foi estabelecido u
 
 A tabela criada para esse projeto foi estabelecida com a chave de partição, sendo a chave primária o número da vaga, e com os atributos de status, para verificar se a vaga está ocupada e número da placa do carro. Quando não houver carro na vaga, este ultimo atributo estará como nulo, a figura 3 mostra uma pré-visualização da tabela.
  
-<div align="center"> Figura 3 - Tabela do banco de dados </div>
+<div align="center"> Figura 7 - Tabela do banco de dados </div>
 <p align="center">
   <img src="figuras/tableDB.png">
 </p>
 
-Para disponibilizar os dados a aplicação, utilizou-se uma interface de programação de aplicativos (API). Uma API é um conjunto de definições e protocolos usado para o desenvolvimento e integração de aplicações. A principal vantagem do uso dessa ferramenta é a possibilidade de integração entre serviços totalmente diferentes de maneira simples.  (HAT, 2020)
+Para disponibilizar os dados a aplicação, utilizou-se uma interface de programação de aplicativos (API). Uma API é um conjunto de definições e protocolos usado para o desenvolvimento e integração de aplicações. A principal vantagem do uso dessa ferramenta é a possibilidade de integração entre serviços totalmente diferentes de maneira simples. (HAT, 2020)
 
-Uma API utiliza requisições HTTP, que são responsáveis pelas operações essenciais para manipulações de dados. Dentre as requisições existentes, utilizada neste trabalho foi a get, responsável por solicitar informações de um determinado recurso para a aplicação. 
+Uma API utiliza requisições HTTP, que são responsáveis pelas operações essenciais para manipulações de dados. Dentre as requisições existentes a utilizada neste trabalho foi do tipo *get*, responsável por solicitar informações de um determinado recurso para a aplicação. 
 
 O serviço de API utilizado para esse projeto é o API Getway oferecido pela AWS. Essa ferramenta oferece o gerenciamento de APIs, onde é possível criar, publicar, manter e monitorar com facilidade. Porém, para estabelecer o conexão entre o  banco de dados e a API, foi preciso criar uma função Lambda que é acionada toda vez que é feito uma requisição HTTP a função é responsável por ler o banco de dados e retornar com os valores.
 
@@ -123,9 +128,9 @@ O serviço de API utilizado para esse projeto é o API Getway oferecido pela AWS
 
  ### Aplicativo
 
- O aplicativo possui duas telas, a primeira tela mostra um estacionamento com a vista superior onde todas as vagas aparecem, já a segunda tela é exibida quando o usuário apertar o botão de busca no canto inferior direito da tela inical. 
+ Para realizar a interface com o usuário, foi criado um aplicativo que possui duas telas, a primeira tela mostra um estacionamento com a vista superior onde todas as vagas aparecem, já a segunda tela é exibida quando o usuário apertar o botão de busca no canto inferior direito da tela inical. 
 
-<div align="center"> Figura 4 - Telas do aplicativo </div>
+<div align="center"> Figura 8 - Telas do aplicativo </div>
 <p align="center">
   <img src="figuras/tela1.png" width="250" />
   <img src="figuras/tela2.png" width="250" /> 
@@ -133,13 +138,16 @@ O serviço de API utilizado para esse projeto é o API Getway oferecido pela AWS
 
 A tela de busca tem uma caixa de texto onde o usuário poderá inserir a placa do seu carro. Se a placa estiver registrada no banco de dados, o aplicativo retornará à tela inicial com um destaque na vaga ocupada, senão, irá aparecer um aviso de veículo não encontrado.
  
- <div align="center"> Figura 5 - Respsta à busca do usuário </div>
+ <div align="center"> Figura 9 - Respsta à busca do usuário </div>
 <p align="center">
   <img src="figuras/tela4.png" width="250"/>
   <img src="figuras/tela3.png" width="250" /> 
 </p>
 
-
+<div align="center"> Figura 10 - Funcionamento do aplicativo </div>
+<p align="center">
+  <img src="figuras/app_func.gif?raw=true" width="250"/>
+</p>
 
  ## Referências
 
