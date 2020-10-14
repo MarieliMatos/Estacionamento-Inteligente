@@ -8,7 +8,7 @@
         2. [AWS IoT Core](#aws-iot-core) <br/> 
 4. [Camada de processamento](#camada-de-processamento)
 5. [Camada de aplicação](#camada-de-aplicação) <br/> 
-        1. [Identificação de usuários](#identificação-de-usuários)
+        1. [Aplicativo](#aplicativo)
 6. [Referências](#referências)
 ## Arquitetura
 
@@ -32,9 +32,9 @@ O reconhecimento de placas foi realizado por meio de um Raspberry Pi Zero W, uti
 da biblioteca de reconhecimento ótico de caracteres (OCR) Tesseract.
 
 Para realizar esta tarefa, foi preciso de várias camadas de processamento de imagens, a fim de de selecionar a região
-da placa, para que o algorítimo de detecção de caracteres seja chamado.
+da placa, para que o algoritmo de detecção de caracteres seja chamado.
 
-A primeira etapa foi converter a imagem em tons de cinza e em seguida retirar os detalhes da imagem, para isso foi utilizado um algoritmo que borra a imagem. Essa função faz a média dos pixels sob a área de um kernel e substitui o elemento central por esse valor. 
+A primeira etapa foi converter a imagem em tons de cinza e em seguida retirar seus detalhes, para isso foi utilizado um algoritmo que borra a imagem. Essa função faz a média dos pixels sob a área de um kernel e substitui o elemento central por esse valor. 
 
 <div align="center"> Figura 2 - Figura Borrada</div>
 <p align="center">
@@ -50,12 +50,12 @@ O filtro de Sobel é um operador de diferenciação, que faz uma aproximação p
   <img src="figuras/sobel.png" width=400>
 </p>
 
-Com as letras detectadas foi realizada a binarização da imagem, para realçar a área de interesse. A última etapa foi interligar as letras da placa e formar um retângulo em volta. Para isso foi criado uma estrutura morfológica específica que melhor se encaixou neste caso.
+Com as letras detectadas foi realizada a binarização da imagem, para realçar a área de interesse. A última etapa foi interligar as letras da placa e formar um retângulo em volta. Para isso foi criado uma estrutura morfológica retângular específica que melhor se encaixou neste caso.
 
 <div align="center"> Figura 4 - Binarização e Estrutura morfológica </div>
 <p align="center">
-  <img src="figuras/binarização.png" width="250" />
-  <img src="figuras/rect.png" width="240" /> 
+  <img src="figuras/binarização.png" width="350" />
+  <img src="figuras/rect.png" width="340" /> 
 </p>
 
 
@@ -71,14 +71,14 @@ Para determinar os caracteres da placa foi utilizado a ferramenta Tessaract, dis
 
 ## Camada de Rede
 
-A camada de rede é responsável pela conexão entre o sensor e a camada de gerenciamento de informações, então, essa camada precisa oferecer um serviço confiável de transmissão de dados.  Para isso, o protocolo de comunicação escolhido foi o MQTT junto com o microcontrolador ESP32 para o envio de dados para o servidor da AWS, o IoT Core.
+A camada de rede é responsável pela conexão entre o microcontrolador e a camada de gerenciamento de informações, então, essa camada precisa oferecer um serviço confiável de transmissão de dados.  Para isso, o protocolo de comunicação escolhido foi o MQTT para o envio de dados para o servidor da AWS, o IoT Core.
 
-### MQTT <a name="mqtt"></a>
+### MQTT 
 O MQTT (*Message Queue Telemetry Transport*) é um protocolo leve que utiliza baixa largura de rede, baseado em TCP/IP. Utiliza o paradigma de publicação e assinatura (*publish/Subscribe*) em um tópico de um servidor para gerenciar o fluxo de dados. 
 
 Nesse padrão, quando um cliente deseja receber uma determinada informação, ele se subscreve em um tópico por meio de uma requisição para um servidor (também conhecido como *broker*), que oferece o serviço de intermediador nesse processo. Serviços que desejam enviar os dados também devem se inscrever nesse tópico. (YUAN, 2017).
 
-### AWS IoT Core <a name="aws-iot-core"></a>
+### AWS IoT Core 
 
 O AWS IoT Core é um serviço de nuvem gerenciada que permite a conexão fácil e segura de dispositivos e aplicativos à Internet. Para estabelecer a segurança no envio e recebimento de mensagens, este serviço oferece autenticação e criptografia mútua nos pontos de conexão, dessa forma, dispositivos e o Core não trocam mensagem sem uma identidade comprovada. 
 
@@ -86,7 +86,7 @@ Os dispositivos que comunicam-se com o protocolo MQTT utilizam o método de segu
 	
 Para haver transferência de dados, além de possuir o certificado, o dispositivo (também chamado de coisa) também precisa estar autorizado a promover a leitura ou escrita em um tópico. Por isso é preciso configurar as politicas de acesso a ‘coisa’, dessa maneira, o usuário tem pleno controle dos acessos aos tópicos do Core.
 
-No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi preciso criar uma coisa (*thing*) que represente este dispositivo na plataforma. Em seguida, criou-se um certificado de autenticação e associar a coisa. Por fim, a politica de autorização foi criada (figura 2), que nesse caso apenas de publicação no tópico da aplicação.
+No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi preciso criar uma coisa (*thing*) que represente este dispositivo na plataforma. Em seguida, criou-se um certificado de autenticação e associar a coisa. Por fim, a politica de autorização foi criada (figura 2), que neste caso, apenas de publicação no tópico da aplicação.
 
 <div align="center"> Figura 6 - Política de dispositivos conectados </div>
 <p align="center">
@@ -111,14 +111,21 @@ A tabela criada para esse projeto foi estabelecida com a chave de partição, se
  
 <div align="center"> Figura 7 - Tabela do banco de dados </div>
 <p align="center">
-  <img src="figuras/tableDB.png">
+  <img src="figuras/dynamo.png">
 </p>
 
-Para disponibilizar os dados a aplicação, utilizou-se uma interface de programação de aplicativos (API). Uma API é um conjunto de definições e protocolos usado para o desenvolvimento e integração de aplicações. A principal vantagem do uso dessa ferramenta é a possibilidade de integração entre serviços totalmente diferentes de maneira simples. (HAT, 2020)
+Para disponibilizar os dados à aplicação, utilizou-se uma interface de programação de aplicativos (API). Uma API é um conjunto de definições e protocolos usado para o desenvolvimento e integração de aplicações. A principal vantagem do uso dessa ferramenta é a possibilidade de integração entre serviços totalmente diferentes de maneira simples. (HAT, 2020)
 
 Uma API utiliza requisições HTTP, que são responsáveis pelas operações essenciais para manipulações de dados. Dentre as requisições existentes a utilizada neste trabalho foi do tipo *get*, responsável por solicitar informações de um determinado recurso para a aplicação. 
 
-O serviço de API utilizado para esse projeto é o API Getway oferecido pela AWS. Essa ferramenta oferece o gerenciamento de APIs, onde é possível criar, publicar, manter e monitorar com facilidade. Porém, para estabelecer o conexão entre o  banco de dados e a API, foi preciso criar uma função Lambda que é acionada toda vez que é feito uma requisição HTTP a função é responsável por ler o banco de dados e retornar com os valores.
+O serviço de API utilizado para esse projeto foi o API Getway, disponibilizado pela AWS. Essa ferramenta oferece o gerenciamento de APIs, onde é possível criar, publicar, manter e monitorar com facilidade as operações. Porém, para estabelecer o conexão entre o  banco de dados e a API, foi preciso criar uma função Lambda que é acionada toda vez que há uma requisição HTTP. Essa função é responsável por ler o banco de dados e retornar com os valores.
+
+A arquitetura final do projeto pode ser vista na Figura 8, onde mostra todos os serviços utilziados e a comunicação com outros dispositivos.
+
+<div align="center"> Figura 8 - Arquitetura final </div>
+<p align="center">
+  <img src="figuras/api.png" width="500">
+</p>
 
  ## Camada de aplicação
  
@@ -130,7 +137,7 @@ O serviço de API utilizado para esse projeto é o API Getway oferecido pela AWS
 
  Para realizar a interface com o usuário, foi criado um aplicativo que possui duas telas, a primeira tela mostra um estacionamento com a vista superior onde todas as vagas aparecem, já a segunda tela é exibida quando o usuário apertar o botão de busca no canto inferior direito da tela inical. 
 
-<div align="center"> Figura 8 - Telas do aplicativo </div>
+<div align="center"> Figura 9 - Telas do aplicativo </div>
 <p align="center">
   <img src="figuras/tela1.png" width="250" />
   <img src="figuras/tela2.png" width="250" /> 
@@ -138,13 +145,13 @@ O serviço de API utilizado para esse projeto é o API Getway oferecido pela AWS
 
 A tela de busca tem uma caixa de texto onde o usuário poderá inserir a placa do seu carro. Se a placa estiver registrada no banco de dados, o aplicativo retornará à tela inicial com um destaque na vaga ocupada, senão, irá aparecer um aviso de veículo não encontrado.
  
- <div align="center"> Figura 9 - Respsta à busca do usuário </div>
+ <div align="center"> Figura 10 - Respsta à busca do usuário </div>
 <p align="center">
   <img src="figuras/tela4.png" width="250"/>
   <img src="figuras/tela3.png" width="250" /> 
 </p>
 
-<div align="center"> Figura 10 - Funcionamento do aplicativo </div>
+<div align="center"> Figura 11 - Funcionamento do aplicativo </div>
 <p align="center">
   <img src="figuras/app_func.gif?raw=true" width="250"/>
 </p>
