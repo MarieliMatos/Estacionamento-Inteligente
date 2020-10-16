@@ -61,7 +61,7 @@ Com as letras detectadas foi realizada a binarização da imagem, para realçar 
 
 Em seguida foi detectado os contornos de forma retangular imagem, e dentre os retângulos foi determinado o retângulo que tem a área da placa. E por fim, foi realizado o corte da imagem na região retangular.
 
-<div align="center"> Figura 5 - Política de dispositivos conectados </div>
+<div align="center"> Figura 5 - Placa cortada </div>
 <p align="center">
   <img src="figuras/crop.png" width=400>
 </p>
@@ -86,7 +86,7 @@ Os dispositivos que comunicam-se com o protocolo MQTT utilizam o método de segu
 	
 Para haver transferência de dados, além de possuir o certificado, o dispositivo (também chamado de coisa) também precisa estar autorizado a promover a leitura ou escrita em um tópico. Por isso é preciso configurar as politicas de acesso a ‘coisa’, dessa maneira, o usuário tem pleno controle dos acessos aos tópicos do Core.
 
-No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi preciso criar uma coisa (*thing*) que represente este dispositivo na plataforma. Em seguida, criou-se um certificado de autenticação e associar a coisa. Por fim, a politica de autorização foi criada (figura 2), que neste caso, apenas de publicação no tópico da aplicação.
+No projeto, o envio de dados é feito apenas pelo microcontrolador, então foi preciso criar uma coisa (*thing*) que represente este dispositivo na plataforma. Em seguida, criou-se um certificado de autenticação e associar a coisa. Por fim, a politica de autorização foi criada (figura 6), que neste caso, apenas de publicação no tópico da aplicação.
 
 <div align="center"> Figura 6 - Política de dispositivos conectados </div>
 <p align="center">
@@ -107,7 +107,7 @@ A chave de partição é composta por apenas um atributo e a utiliza para a cham
 
 Para associar a camada de rede com a camada de processamento, foi estabelecido uma regra no AWS IoT Core que ao receber uma mensagem no tópico do estacionamento a informação era salva no banco de dados “Estacionamento”. 
 
-A tabela criada para esse projeto foi estabelecida com a chave de partição, sendo a chave primária o número da vaga, e com os atributos de status, para verificar se a vaga está ocupada e número da placa do carro. Quando não houver carro na vaga, este ultimo atributo estará como nulo, a figura 3 mostra uma pré-visualização da tabela.
+A tabela criada para esse projeto foi estabelecida com a chave de partição, sendo a chave primária o número da vaga, e com os atributos de status, para verificar se a vaga está ocupada e número da placa do carro. Quando não houver carro na vaga, este ultimo atributo estará como nulo, a figura 7 mostra uma pré-visualização da tabela.
  
 <div align="center"> Figura 7 - Tabela do banco de dados </div>
 <p align="center">
